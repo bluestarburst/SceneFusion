@@ -1,0 +1,3 @@
+[submodule "AnimateDiff-SceneFusion"]
+	path = AnimateDiff-SceneFusion
+	url = https://github.com/BlueStarBurst/AnimateDiff-SceneFusion.git
