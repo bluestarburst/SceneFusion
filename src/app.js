@@ -6,6 +6,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { useEffect } from "react";
 
 import "./style.scss";
+import { Button } from "@mui/material";
 
 // this is a theme that we can use to make our app dark
 const darkTheme = createTheme({
@@ -44,6 +45,10 @@ function App() {
                 <br/>
 
 				<p>{test}</p>
+
+                <br/>
+
+                <Button variant="contained" color="primary">Click Me!</Button>
 			</div>
 		</ThemeProvider>
 	);
