@@ -1,0 +1,29 @@
+html {
+  scroll-behavior: smooth;
+  width: 100vw !important;
+  height: 100vh;
+  font-family: 'Roboto', sans-serif;
+}
+
+p, h5 {
+  margin: 0rem !important;
+}
+
+#root {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  top: 0;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+}
+
+.flex-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
