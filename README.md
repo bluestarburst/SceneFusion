@@ -1,4 +1,4 @@
-# CodePilot
+# SceneFusion
 
 The website is also publicly available [here](https://bluestarburst.github.io/SceneFusion/) 
 
