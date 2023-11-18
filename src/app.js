@@ -34,7 +34,7 @@ function App() {
 		<ThemeProvider theme={darkTheme}>
             <CssBaseline />
 			<div className="flex-page">
-				<h1>Hello World</h1>
+				<h1>Goodbye World</h1>
 
 				<TextField
 					label="Test"
