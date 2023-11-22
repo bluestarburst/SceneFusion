@@ -1,6 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\docs",
+    "\\public",
+    "\\src"
   ],
+  "SelectedNode": "\\docs\\appBundle.js",
   "PreviewInSolutionExplorer": false
 }
