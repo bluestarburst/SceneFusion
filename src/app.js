@@ -32,7 +32,7 @@ function App() {
     // this is the HTML that will be rendered
     // all JS code must be inside curly braces!
     return (
-        <div>
+        <div className="Search">
             <img
                 src={backgroundImage}
                 alt="Background"
