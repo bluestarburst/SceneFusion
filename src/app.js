@@ -7,7 +7,7 @@ import { useEffect } from "react";
 
 import "./style.scss";
 import { Button } from "@mui/material";
-import backgroundImage from "";
+import backgroundImage from "./Resources/Letter C Profile Picture.jpg";
 
 // this is a theme that we can use to make our app dark
 const darkTheme = createTheme({
@@ -32,26 +32,34 @@ function App() {
     // this is the HTML that will be rendered
     // all JS code must be inside curly braces!
     return (
-        <ThemeProvider theme={darkTheme}>
-            <CssBaseline />
-            <div className="flex-page" style={{ backgroundImage: `url(${backgroundImage})` }}>
-                <h1>Goodbye World</h1>
+        <div>
+            <img
+                src={backgroundImage}
+                alt="Background"
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                }}
+            />
+            <h1 style={{ color: "#000" }}>Goodbye World</h1>
 
-                <TextField
-                    label="Test"
-                    value={test}
-                    onChange={(e) => setTest(e.target.value)}
-                />
+            <TextField
+                label="Test"
+                value={test}
+                onChange={(e) => setTest(e.target.value)}
+            />
 
-                <br />
+            <br />
 
-                <p>{test}</p>
+            <p style={{ color: "#000" }}>{test}</p>
 
-                <br />
+            <br />
 
-                <Button variant="contained" color="primary">Click Me!</Button>
-            </div>
-        </ThemeProvider>
+            <Button variant="contained" color="primary">
+                Click Me!
+            </Button>
+        </div>
     );
 }
 

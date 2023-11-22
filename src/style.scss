@@ -21,9 +21,13 @@ p, h5 {
 }
 
 .flex-page {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-color: transparent;
+    color: #fff;
 }
