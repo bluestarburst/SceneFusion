@@ -3,8 +3,9 @@
     "",
     "\\docs",
     "\\public",
-    "\\src"
+    "\\src",
+    "\\src\\Resources"
   ],
-  "SelectedNode": "\\src\\resources.txt",
+  "SelectedNode": "\\src\\Resources\\Letter C Profile Picture.jpg",
   "PreviewInSolutionExplorer": false
 }
