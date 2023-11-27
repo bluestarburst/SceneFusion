@@ -43,14 +43,30 @@ const buttonStyle = {
 
 function App() {
     const [prompt, setPrompt] = useState("");
-    const [numSteps, setNumSteps] = useState(1);
+    const [numSteps, setNumSteps] = useState(25);
     const [negativePrompt, setNegativePrompt] = useState("");
-    const [numFrames, setNumFrames] = useState(1);
+    const [numFrames, setNumFrames] = useState(12.5);
     const [showImage, setShowImage] = useState(false);
     const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
+    const [imageSrc, setImageSrc] = useState("");
 
     const handleSubmit = () => {
-        setShowImage(true);
+        query({
+            "inputs": {
+                "prompt": prompt,
+                "negative_prompt": negativePrompt,
+                "steps": numSteps,
+                "guidance_scale": numFrames
+            }
+        }).then((response) => {
+            console.log(JSON.stringify(response));
+            var thing = JSON.parse(response)
+            var base64 = thing["content"]
+            var gif = base64ToGif(base64)
+            console.log(gif)
+            setImageSrc(gif)
+            setShowImage(true)
+        });
     };
 
     const handleRestart = () => {
@@ -67,7 +83,7 @@ function App() {
             <div style={containerStyle}>
                 {showImage ? (
                     <div>
-                        <img src={image} alt="Profile" />
+                        <img src={imageSrc} alt="Profile" />
                     </div>
                 ) : (
                     <div style={formStyle}>
@@ -106,20 +122,22 @@ function App() {
                                     value={numSteps}
                                     onChange={(e, value) => setNumSteps(value)}
                                     min={1}
-                                    max={10}
+                                    max={50}
+                                    defaultValue={25}
                                     step={1}
                                     marks
                                     valueLabelDisplay="auto"
                                 />
                                 <Typography variant="h6" gutterBottom>
-                                    Number of Frames:
+                                    Guidance:
                                 </Typography>
                                 <Slider
                                     value={numFrames}
                                     onChange={(e, value) => setNumFrames(value)}
-                                    min={1}
-                                    max={10}
-                                    step={1}
+                                    min={0}
+                                    max={20}
+                                    defaultValue={12.5}
+                                    step={0.5}
                                     marks
                                     valueLabelDisplay="auto"
                                 />
@@ -148,6 +166,26 @@ function App() {
             </div>
         </ThemeProvider>
     );
+}
+async function query(data) {
+    const response = await fetch(
+        "https://wri73pe2m2znvucm.us-east-1.aws.endpoints.huggingface.cloud/",
+        {
+            headers: {
+                "Authorization": "Bearer XXXXXX",
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify(data),
+        }
+    );
+    const result = await response.json();
+    return result;
+}
+
+function base64ToGif(base64) {
+    var blob = new Blob([base64], { type: "image/gif" });
+    return window.URL.createObjectURL(blob);
 }
 
 render(<App />, document.getElementById("root"));
