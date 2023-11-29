@@ -125,7 +125,7 @@ function App() {
                                     max={50}
                                     defaultValue={25}
                                     step={1}
-                                    marks
+                                    // marks
                                     valueLabelDisplay="auto"
                                 />
                                 <Typography variant="h6" gutterBottom>
@@ -138,7 +138,7 @@ function App() {
                                     max={20}
                                     defaultValue={12.5}
                                     step={0.5}
-                                    marks
+                                    // marks
                                     valueLabelDisplay="auto"
                                 />
                             </>
