@@ -16,9 +16,15 @@ import image from "./Resources/Letter C Profile Picture.jpg";
 import fakeGif from "./Resources/sample-17.gif";
 import "./style.scss";
 
+// const https = require('https'); // or import https from 'https'
+import https from "https";
+const agent = new https.Agent({
+	rejectUnauthorized: false,
+});
+
 const URL =
 	// "https://wri73pe2m2znvucm.us-east-1.aws.endpoints.huggingface.cloud" + "/";
-    "https://18.191.71.4:5000/scene"
+	"https://18.191.71.4:5000/scene";
 
 const darkTheme = createTheme({
 	palette: {
@@ -63,20 +69,22 @@ function App() {
 	const handleSubmit = () => {
 		setLoading(true);
 		query({
-		    "inputs": {
-		        "prompt": prompt,
-		        "negative_prompt": negativePrompt,
-		        "steps": numSteps,
-		        "guidance_scale": numFrames
-		    }
+			inputs: {
+				prompt: prompt,
+				negative_prompt: negativePrompt,
+				steps: numSteps,
+				guidance_scale: numFrames,
+			},
 		}).then((response) => {
-		    console.log(JSON.stringify(response));
-		    var thing = JSON.parse(response)
-		    var base64 = thing["content"]
-		    var gif = base64ToGif(base64)
-		    console.log(gif)
-		    setImageSrc(gif)
-		    setShowImage(true)
+			// return response.json();
+			setLoading(false);
+			console.log(JSON.stringify(response));
+			// var thing = JSON.parse(response)
+			var base64 = response["content"];
+			var gif = base64ToGif(base64);
+			console.log(gif);
+			setImageSrc(gif);
+			setShowImage(true);
 		});
 		// setTimeout(() => {
 		// 	setLoading(false);
@@ -111,11 +119,11 @@ function App() {
 						<Typography variant="h4" gutterBottom>
 							SceneFusion
 						</Typography>
-						<div style={{width: "100vw", maxWidth: "500px"}}>
+						<div style={{ width: "100vw", maxWidth: "500px" }}>
 							<TextField
 								fullWidth
 								label="Prompt"
-                                multiline
+								multiline
 								value={prompt}
 								onChange={(e) => setPrompt(e.target.value)}
 							/>
@@ -176,22 +184,20 @@ function App() {
 					</div>
 				)}
 				{showImage && (
-                    <>
-					{/* // <Button
-					// 	variant="contained"
-					// 	color="primary"
-					// 	style={buttonStyle}
-					// 	onClick={handleRestart}
-					// >
-					// 	Restart
-					// </Button> */}
-                    </>
-                    
+					<Button
+						variant="contained"
+						color="primary"
+						style={buttonStyle}
+						onClick={handleRestart}
+					>
+						Restart
+					</Button>
 				)}
 			</div>
 		</ThemeProvider>
 	);
 }
+
 async function query(data) {
 	const response = await fetch(URL, {
 		headers: {
@@ -200,6 +206,7 @@ async function query(data) {
 		},
 		method: "POST",
 		body: JSON.stringify(data),
+		agent: agent,
 	});
 	const result = await response.json();
 	return result;
