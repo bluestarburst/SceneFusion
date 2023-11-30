@@ -1,191 +1,213 @@
 import React, { useState, useEffect } from "react";
 import { render } from "react-dom";
 import {
-    TextField,
-    Button,
-    Slider,
-    Input,
-    Typography,
-    Switch,
-    FormControlLabel,
+	TextField,
+	Button,
+	Slider,
+	Input,
+	Typography,
+	Switch,
+	FormControlLabel,
+	CircularProgress,
 } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import image from "./Resources/Letter C Profile Picture.jpg";
+import fakeGif from "./Resources/sample-17.gif";
 import "./style.scss";
 
+const URL =
+	"https://wri73pe2m2znvucm.us-east-1.aws.endpoints.huggingface.cloud" + "/";
+
 const darkTheme = createTheme({
-    palette: {
-        mode: "dark",
-    },
+	palette: {
+		mode: "dark",
+	},
 });
 
 const containerStyle = {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100vh",
-    padding: "20px",
-    backgroundColor: darkTheme.palette.background.default,
+	display: "flex",
+	flexDirection: "column",
+	alignItems: "center",
+	justifyContent: "center",
+	height: "100vh",
+	padding: "20px",
+	backgroundColor: darkTheme.palette.background.default,
 };
 
 const formStyle = {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "20px",
+	display: "flex",
+	flexDirection: "column",
+	alignItems: "center",
+	gap: "20px",
 };
 
 const buttonStyle = {
-    marginTop: "20px",
+	marginTop: "20px",
 };
 
 function App() {
-    const [prompt, setPrompt] = useState("");
-    const [numSteps, setNumSteps] = useState(25);
-    const [negativePrompt, setNegativePrompt] = useState("");
-    const [numFrames, setNumFrames] = useState(12.5);
-    const [showImage, setShowImage] = useState(false);
-    const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
-    const [imageSrc, setImageSrc] = useState("");
+	const [prompt, setPrompt] = useState(
+		"camera panning right to left, a bird's eye view of a row of buildings in a city with trees in the foreground, masterpiece, best quality"
+	);
+	const [numSteps, setNumSteps] = useState(25);
+	const [negativePrompt, setNegativePrompt] = useState("");
+	const [numFrames, setNumFrames] = useState(12.5);
+	const [showImage, setShowImage] = useState(false);
+	const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
+	const [imageSrc, setImageSrc] = useState("");
 
-    const handleSubmit = () => {
-        query({
-            "inputs": {
-                "prompt": prompt,
-                "negative_prompt": negativePrompt,
-                "steps": numSteps,
-                "guidance_scale": numFrames
-            }
-        }).then((response) => {
-            console.log(JSON.stringify(response));
-            var thing = JSON.parse(response)
-            var base64 = thing["content"]
-            var gif = base64ToGif(base64)
-            console.log(gif)
-            setImageSrc(gif)
-            setShowImage(true)
-        });
-    };
+	const [loading, setLoading] = useState(false);
 
-    const handleRestart = () => {
-        setShowImage(false);
-        setShowAdvancedOptions(false); // Reset the advanced options state
-    };
+	const handleSubmit = () => {
+		setLoading(true);
+		// query({
+		//     "inputs": {
+		//         "prompt": prompt,
+		//         "negative_prompt": negativePrompt,
+		//         "steps": numSteps,
+		//         "guidance_scale": numFrames
+		//     }
+		// }).then((response) => {
+		//     console.log(JSON.stringify(response));
+		//     var thing = JSON.parse(response)
+		//     var base64 = thing["content"]
+		//     var gif = base64ToGif(base64)
+		//     console.log(gif)
+		//     setImageSrc(gif)
+		//     setShowImage(true)
+		// });
+		setTimeout(() => {
+			setLoading(false);
+			setImageSrc(fakeGif);
+			setShowImage(true);
+		}, 3000);
+	};
 
-    useEffect(() => {
-        console.log("This happens when this component renders!");
-    }, []);
+	const handleRestart = () => {
+		setShowImage(false);
+		setShowAdvancedOptions(false); // Reset the advanced options state
+	};
 
-    return (
-        <ThemeProvider theme={darkTheme}>
-            <div style={containerStyle}>
-                {showImage ? (
-                    <div>
-                        <img src={imageSrc} alt="Profile" />
-                    </div>
-                ) : (
-                    <div style={formStyle}>
-                        <CssBaseline />
-                        <Typography variant="h4" gutterBottom>
-                            SceneFusion
-                        </Typography>
-                        <TextField
-                            label="Prompt"
-                            value={prompt}
-                            onChange={(e) => setPrompt(e.target.value)}
-                        />
-                        <FormControlLabel
-                            control={
-                                <Switch
-                                    checked={showAdvancedOptions}
-                                    onChange={() =>
-                                        setShowAdvancedOptions(!showAdvancedOptions)
-                                    }
-                                    color="primary"
-                                />
-                            }
-                            label="Advanced Options"
-                        />
-                        {showAdvancedOptions && (
-                            <>
-                                <TextField
-                                    label="Negative Prompt"
-                                    value={negativePrompt}
-                                    onChange={(e) => setNegativePrompt(e.target.value)}
-                                />
-                                <Typography variant="h6" gutterBottom>
-                                    Number of Steps:
-                                </Typography>
-                                <Slider
-                                    value={numSteps}
-                                    onChange={(e, value) => setNumSteps(value)}
-                                    min={1}
-                                    max={50}
-                                    defaultValue={25}
-                                    step={1}
-                                    // marks
-                                    valueLabelDisplay="auto"
-                                />
-                                <Typography variant="h6" gutterBottom>
-                                    Guidance:
-                                </Typography>
-                                <Slider
-                                    value={numFrames}
-                                    onChange={(e, value) => setNumFrames(value)}
-                                    min={0}
-                                    max={20}
-                                    defaultValue={12.5}
-                                    step={0.5}
-                                    // marks
-                                    valueLabelDisplay="auto"
-                                />
-                            </>
-                        )}
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            style={buttonStyle}
-                            onClick={handleSubmit}
-                        >
-                            Submit
-                        </Button>
-                    </div>
-                )}
-                {showImage && (
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        style={buttonStyle}
-                        onClick={handleRestart}
-                    >
-                        Restart
-                    </Button>
-                )}
-            </div>
-        </ThemeProvider>
-    );
+	useEffect(() => {
+		console.log("This happens when this component renders!");
+	}, []);
+
+	return (
+		<ThemeProvider theme={darkTheme}>
+			<div style={containerStyle}>
+				{loading ? (
+					<>
+						<CircularProgress />
+					</>
+				) : showImage ? (
+					<div>
+						<img src={imageSrc} alt="Profile" />
+					</div>
+				) : (
+					<div style={formStyle}>
+						<CssBaseline />
+						<Typography variant="h4" gutterBottom>
+							SceneFusion
+						</Typography>
+						<div style={{width: "100vw", maxWidth: "500px"}}>
+							<TextField
+								fullWidth
+								label="Prompt"
+                                multiline
+								value={prompt}
+								onChange={(e) => setPrompt(e.target.value)}
+							/>
+						</div>
+						<FormControlLabel
+							control={
+								<Switch
+									checked={showAdvancedOptions}
+									onChange={() => setShowAdvancedOptions(!showAdvancedOptions)}
+									color="primary"
+								/>
+							}
+							label="Advanced Options"
+						/>
+						{showAdvancedOptions && (
+							<>
+								<TextField
+									label="Negative Prompt"
+									value={negativePrompt}
+									onChange={(e) => setNegativePrompt(e.target.value)}
+								/>
+								<Typography variant="h6" gutterBottom>
+									Number of Steps:
+								</Typography>
+								<Slider
+									value={numSteps}
+									onChange={(e, value) => setNumSteps(value)}
+									min={1}
+									max={50}
+									defaultValue={25}
+									step={1}
+									// marks
+									valueLabelDisplay="auto"
+								/>
+								<Typography variant="h6" gutterBottom>
+									Guidance:
+								</Typography>
+								<Slider
+									value={numFrames}
+									onChange={(e, value) => setNumFrames(value)}
+									min={0}
+									max={20}
+									defaultValue={12.5}
+									step={0.5}
+									// marks
+									valueLabelDisplay="auto"
+								/>
+							</>
+						)}
+						<Button
+							variant="contained"
+							color="primary"
+							style={buttonStyle}
+							onClick={handleSubmit}
+						>
+							Submit
+						</Button>
+					</div>
+				)}
+				{showImage && (
+                    <>
+					{/* // <Button
+					// 	variant="contained"
+					// 	color="primary"
+					// 	style={buttonStyle}
+					// 	onClick={handleRestart}
+					// >
+					// 	Restart
+					// </Button> */}
+                    </>
+				)}
+			</div>
+		</ThemeProvider>
+	);
 }
 async function query(data) {
-    const response = await fetch(
-        "https://wri73pe2m2znvucm.us-east-1.aws.endpoints.huggingface.cloud/",
-        {
-            headers: {
-                "Authorization": "Bearer XXXXXX",
-                "Content-Type": "application/json"
-            },
-            method: "POST",
-            body: JSON.stringify(data),
-        }
-    );
-    const result = await response.json();
-    return result;
+	const response = await fetch(URL, {
+		headers: {
+			Authorization: "Bearer XXXXXX",
+			"Content-Type": "application/json",
+		},
+		method: "POST",
+		body: JSON.stringify(data),
+	});
+	const result = await response.json();
+	return result;
 }
 
 function base64ToGif(base64) {
-    var blob = new Blob([base64], { type: "image/gif" });
-    return window.URL.createObjectURL(blob);
+	// var blob = new Blob([base64], { type: "image/gif" });
+	// return window.URL.createObjectURL(blob);
+
+	return "data:image/gif;base64," + base64;
 }
 
 render(<App />, document.getElementById("root"));
