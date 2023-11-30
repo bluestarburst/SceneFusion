@@ -17,7 +17,8 @@ import fakeGif from "./Resources/sample-17.gif";
 import "./style.scss";
 
 const URL =
-	"https://wri73pe2m2znvucm.us-east-1.aws.endpoints.huggingface.cloud" + "/";
+	// "https://wri73pe2m2znvucm.us-east-1.aws.endpoints.huggingface.cloud" + "/";
+    "https://18.191.71.4:5000/scene"
 
 const darkTheme = createTheme({
 	palette: {
@@ -61,27 +62,27 @@ function App() {
 
 	const handleSubmit = () => {
 		setLoading(true);
-		// query({
-		//     "inputs": {
-		//         "prompt": prompt,
-		//         "negative_prompt": negativePrompt,
-		//         "steps": numSteps,
-		//         "guidance_scale": numFrames
-		//     }
-		// }).then((response) => {
-		//     console.log(JSON.stringify(response));
-		//     var thing = JSON.parse(response)
-		//     var base64 = thing["content"]
-		//     var gif = base64ToGif(base64)
-		//     console.log(gif)
-		//     setImageSrc(gif)
-		//     setShowImage(true)
-		// });
-		setTimeout(() => {
-			setLoading(false);
-			setImageSrc(fakeGif);
-			setShowImage(true);
-		}, 3000);
+		query({
+		    "inputs": {
+		        "prompt": prompt,
+		        "negative_prompt": negativePrompt,
+		        "steps": numSteps,
+		        "guidance_scale": numFrames
+		    }
+		}).then((response) => {
+		    console.log(JSON.stringify(response));
+		    var thing = JSON.parse(response)
+		    var base64 = thing["content"]
+		    var gif = base64ToGif(base64)
+		    console.log(gif)
+		    setImageSrc(gif)
+		    setShowImage(true)
+		});
+		// setTimeout(() => {
+		// 	setLoading(false);
+		// 	setImageSrc(fakeGif);
+		// 	setShowImage(true);
+		// }, 3000);
 	};
 
 	const handleRestart = () => {
