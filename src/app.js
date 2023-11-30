@@ -55,7 +55,7 @@ const buttonStyle = {
 
 function App() {
 	const [prompt, setPrompt] = useState(
-		"camera panning right to left, a bird's eye view of a row of buildings in a city with trees in the foreground, masterpiece, best quality"
+		""
 	);
 	const [numSteps, setNumSteps] = useState(25);
 	const [negativePrompt, setNegativePrompt] = useState("");
