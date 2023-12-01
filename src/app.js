@@ -22,10 +22,10 @@ const agent = new https.Agent({
 	rejectUnauthorized: false,
 });
 
-
-const URL =
-	"https://bjv955o44f.execute-api.us-east-2.amazonaws.com/scene";
-	// "http://18.116.150.166:80/scene";
+const URL = "https://bjv955o44f.execute-api.us-east-2.amazonaws.com/scene";
+const IsReadyURL =
+	"https://bjv955o44f.execute-api.us-east-2.amazonaws.com/isReady";
+// "http://18.116.150.166:80/scene";
 
 const darkTheme = createTheme({
 	palette: {
@@ -56,6 +56,7 @@ const buttonStyle = {
 	marginTop: "20px",
 };
 
+var interval = null;
 function App() {
 	const [prompt, setPrompt] = useState(
 		"camera panning right to left, a bird's eye view of a row of buildings in a city with trees in the foreground, masterpiece, best quality"
@@ -68,49 +69,53 @@ function App() {
 	const [imageSrc, setImageSrc] = useState("");
 
 	const [loading, setLoading] = useState(false);
+	const [requestID, setRequestID] = useState(0);
+	const [progress, setProgress] = useState(0);
+	const [inQueue, setInQueue] = useState(true);
 
 	const handleSubmit = () => {
+		setInQueue(true);
 		setLoading(true);
-		query({
-			inputs: {
-				prompt: prompt,
-				negative_prompt: negativePrompt,
-				steps: numSteps,
-				guidance_scale: numFrames,
+		// randomize request ID between 0 and 1000000
+		var num = Math.floor(Math.random() * 1000000);
+		setRequestID(num);
+		query(
+			{
+				inputs: {
+					prompt: prompt,
+					negative_prompt: negativePrompt,
+					steps: numSteps,
+					guidance_scale: numFrames,
+				},
+				id: num,
 			},
-		}, false).then((response) => {
-			// return response.json();
-			setLoading(false);
-			console.log(JSON.stringify(response));
-			// var thing = JSON.parse(response)
-			var base64 = response["content"];
-			var gif = base64ToGif(base64);
-			console.log(gif);
-			setImageSrc(gif);
-			setShowImage(true);
-		}).catch((error) => {
-            query({
-                inputs: {
-                    prompt: prompt,
-                    negative_prompt: negativePrompt,
-                    steps: numSteps,
-                    guidance_scale: numFrames,
-                },
-            }, true).then((response) => {
-                // return response.json();
-                setLoading(false);
-                console.log(JSON.stringify(response));
-                // var thing = JSON.parse(response)
-                var base64 = response["content"];
-                var gif = base64ToGif(base64);
-                console.log(gif);
-                setImageSrc(gif);
-                setShowImage(true);
-            }).catch((error) => {
-                console.log(error);
-                setLoading(false);
-            });
-        });
+			false
+		)
+			.then((r) => {
+				interval = setInterval(() => {
+					checkResult({ id: num }, false).then((response) => {
+						if (response["ready"] == true) {
+							clearInterval(interval);
+							setLoading(false);
+							console.log(JSON.stringify(response));
+							// var thing = JSON.parse(response)
+							var base64 = response["result"]["content"];
+							var gif = base64ToGif(base64);
+							console.log(gif);
+							setImageSrc(gif);
+							setShowImage(true);
+						} else {
+							console.log("not ready");
+							setProgress(response["progress"]);
+							console.log("PROGRESS",response["progress"]);
+						}
+					});
+				}, 1000);
+			})
+			.catch((error) => {
+				console.log(error);
+				setLoading(false);
+			});
 
 		// setTimeout(() => {
 		// 	setLoading(false);
@@ -225,7 +230,7 @@ function App() {
 }
 
 async function query(data, local) {
-    console.log(JSON.stringify(data));
+	console.log(JSON.stringify(data));
 	const response = await fetch(local ? "scene" : URL, {
 		headers: {
 			Authorization: "Bearer XXXXXX",
@@ -235,7 +240,23 @@ async function query(data, local) {
 		body: JSON.stringify(data),
 		agent: agent,
 	});
-    
+
+	const result = await response.json();
+	return result;
+}
+
+async function checkResult(data, local) {
+	console.log(JSON.stringify(data));
+	const response = await fetch(local ? "scene" : IsReadyURL, {
+		headers: {
+			Authorization: "Bearer XXXXXX",
+			"Content-Type": "application/json",
+		},
+		method: "POST",
+		body: JSON.stringify(data),
+		agent: agent,
+	});
+
 	const result = await response.json();
 	return result;
 }
