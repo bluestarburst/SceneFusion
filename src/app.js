@@ -24,8 +24,8 @@ const agent = new https.Agent({
 
 
 const URL =
-	// "https://wri73pe2m2znvucm.us-east-1.aws.endpoints.huggingface.cloud" + "/";
-	"http://18.116.150.166:80/scene";
+	"ec2-18-116-150-166.us-east-2.compute.amazonaws.com" + "/";
+	// "http://18.116.150.166:80/scene";
 
 const darkTheme = createTheme({
 	palette: {
@@ -202,6 +202,7 @@ function App() {
 }
 
 async function query(data) {
+    console.log(JSON.stringify(data));
 	const response = await fetch(URL, {
 		headers: {
 			Authorization: "Bearer XXXXXX",
@@ -211,6 +212,7 @@ async function query(data) {
 		body: JSON.stringify(data),
 		agent: agent,
 	});
+    
 	const result = await response.json();
 	return result;
 }

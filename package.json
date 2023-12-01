@@ -4,7 +4,9 @@
     "description": "",
     "scripts": {
         "start": "webpack-dev-server --open --config webpack.dev.js --mode development",
-        "docs": "webpack --config webpack.docs.js --watch --mode development"
+        "docs": "webpack --config webpack.docs.js --watch --mode development",
+        "flask": "webpack --config webpack.flask.js --watch --mode development"
+
     },
     "dependencies": {
         "@emotion/react": "^11.10.5",
