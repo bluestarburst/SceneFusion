@@ -41,7 +41,9 @@ const containerStyle = {
 	alignItems: "center",
 	justifyContent: "center",
 	height: "100vh",
-	padding: "20px",
+	padding: "1rem",
+	width: "100vw",
+	maxWidth: "500px",
 	backgroundColor: darkTheme.palette.background.default,
 };
 
@@ -50,6 +52,7 @@ const formStyle = {
 	flexDirection: "column",
 	alignItems: "center",
 	gap: "20px",
+	width: "100%",
 };
 
 const buttonStyle = {
@@ -128,7 +131,7 @@ function App() {
 					steps: numSteps,
 					guidance_scale: numFrames,
 				},
-                isLarge: isLarge,
+				isLarge: isLarge,
 				ip: num,
 			},
 			false
@@ -186,7 +189,7 @@ function App() {
 						<Typography variant="h4" gutterBottom>
 							SceneFusion
 						</Typography>
-						<div style={{ width: "100vw", maxWidth: "500px" }}>
+						<div style={{ width: "100%" }}>
 							<TextField
 								fullWidth
 								label="Prompt"
@@ -207,23 +210,16 @@ function App() {
 						/>
 						{showAdvancedOptions && (
 							<>
-								<FormControlLabel
-									control={
-										<Switch
-											checked={isLarge}
-											onChange={() =>
-												setIsLarge(!isLarge)
-											}
-											color="primary"
-										/>
-									}
-									label="Large Model (takes a lot longer to create)"
-								/>
-								<TextField
-									label="Negative Prompt"
-									value={negativePrompt}
-									onChange={(e) => setNegativePrompt(e.target.value)}
-								/>
+								
+								<div style={{ width: "100%" }}>
+									<TextField
+										fullWidth
+										label="Negative Prompt"
+										value={negativePrompt}
+										multiline
+										onChange={(e) => setNegativePrompt(e.target.value)}
+									/>
+								</div>
 								<Typography variant="h6" gutterBottom>
 									Number of Steps:
 								</Typography>
@@ -249,6 +245,16 @@ function App() {
 									step={0.5}
 									// marks
 									valueLabelDisplay="auto"
+								/>
+                                <FormControlLabel
+									control={
+										<Switch
+											checked={isLarge}
+											onChange={() => setIsLarge(!isLarge)}
+											color="primary"
+										/>
+									}
+									label="Large Model (Very Slow!)"
 								/>
 							</>
 						)}
