@@ -257,7 +257,7 @@ function App() {
 									}
 									label="Large Model (Very Slow!)"
 								/>
-                                <FormControlLabel
+                                {/* <FormControlLabel
 									control={
 										<Switch
 											checked={!isNotLora}
@@ -266,7 +266,7 @@ function App() {
 										/>
 									}
 									label="Toon Lora"
-								/>
+								/> */}
 							</>
 						)}
 						<Button
