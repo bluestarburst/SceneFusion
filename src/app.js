@@ -57,6 +57,7 @@ const buttonStyle = {
 };
 
 var interval = null;
+var timeout = null;
 function App() {
 	const [prompt, setPrompt] = useState(
 		"camera panning right to left, a bird's eye view of a row of buildings in a city with trees in the foreground, masterpiece, best quality"
@@ -69,12 +70,47 @@ function App() {
 	const [imageSrc, setImageSrc] = useState("");
 
 	const [loading, setLoading] = useState(false);
-	const [requestID, setRequestID] = useState(0);
+	const [requestID, setRequestID] = useState(-1);
 	const [progress, setProgress] = useState(0);
 	const [inQueue, setInQueue] = useState(true);
+	const [flip, setFlip] = useState(false);
+	const [pos, setPos] = useState("1 / 1");
 
-    useEffect(() => {
-        
+	useEffect(() => {
+		if (requestID == -1) {
+			return;
+		}
+		clearTimeout(timeout);
+		timeout = setTimeout(() => {
+			checkResult({ ip: requestID }, false).then((response) => {
+				if (response["ready"] == true) {
+					clearInterval(interval);
+					setLoading(false);
+					console.log(JSON.stringify(response));
+					// var thing = JSON.parse(response)
+					var base64 = response["result"]["content"];
+					var gif = base64ToGif(base64);
+					console.log(gif);
+					setImageSrc(gif);
+					setShowImage(true);
+					setRequestID(-1);
+				} else {
+					setFlip(!flip);
+					console.log("not ready");
+					setProgress(response["progress"]);
+					console.log("PROGRESS", response["progress"]);
+					var queue_len = response["queue"];
+					var pos = response["pos"];
+					if (response["progress"] > 0) {
+						setInQueue(false);
+					} else {
+						setInQueue(true);
+						setPos(pos + " / " + queue_len);
+					}
+				}
+			});
+		}, 3000);
+	}, [flip]);
 
 	const handleSubmit = () => {
 		setInQueue(true);
@@ -95,30 +131,7 @@ function App() {
 			false
 		)
 			.then((r) => {
-				interval = setInterval(() => {
-					checkResult({ ip: num }, false).then((response) => {
-						if (response["ready"] == true) {
-							clearInterval(interval);
-							setLoading(false);
-							console.log(JSON.stringify(response));
-							// var thing = JSON.parse(response)
-							var base64 = response["result"]["content"];
-							var gif = base64ToGif(base64);
-							console.log(gif);
-							setImageSrc(gif);
-							setShowImage(true);
-						} else {
-							console.log("not ready");
-							setProgress(response["progress"]);
-							console.log("PROGRESS", response["progress"]);
-							if (response["progress"] > 0) {
-								setInQueue(true);
-							} else {
-								setInQueue(false);
-							}
-						}
-					});
-				}, 3000);
+				setFlip(!flip);
 			})
 			.catch((error) => {
 				console.log(error);
@@ -148,11 +161,16 @@ function App() {
 					<>
 						{inQueue ? (
 							<>
-								<p>In Queue</p>
+								<p>In Queue {pos}</p>
+                                <br/>
 								<CircularProgress />
 							</>
 						) : (
-							<CircularProgress variant="determinate" value={progress} />
+							<>
+								<CircularProgress variant="determinate" value={progress} />
+                                <br/>
+								<p>{progress}%</p>
+							</>
 						)}
 					</>
 				) : showImage ? (
