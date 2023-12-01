@@ -24,7 +24,7 @@ const agent = new https.Agent({
 
 
 const URL =
-	"https://ec2-18-116-150-166.us-east-2.compute.amazonaws.com" + "/scene";
+	"https://bjv955o44f.execute-api.us-east-2.amazonaws.com/scene";
 	// "http://18.116.150.166:80/scene";
 
 const darkTheme = createTheme({

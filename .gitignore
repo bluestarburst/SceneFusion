@@ -2,5 +2,5 @@ key.txt
 node_modules
 AnimateDiff-SceneFusion
 .venv
-key.pem
-cert.pem
+# key.pem
+# cert.pem
