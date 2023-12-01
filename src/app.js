@@ -74,7 +74,7 @@ function App() {
 	const [progress, setProgress] = useState(0);
 	const [inQueue, setInQueue] = useState(true);
 	const [flip, setFlip] = useState(false);
-	const [pos, setPos] = useState("1 / 1");
+	const [pos, setPos] = useState("");
 
 	useEffect(() => {
 		if (requestID == -1) {
@@ -94,6 +94,7 @@ function App() {
 					setImageSrc(gif);
 					setShowImage(true);
 					setRequestID(-1);
+                    setPos("");
 				} else {
 					setFlip(!flip);
 					console.log("not ready");
