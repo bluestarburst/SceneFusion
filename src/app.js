@@ -24,7 +24,7 @@ const agent = new https.Agent({
 
 const URL =
 	// "https://wri73pe2m2znvucm.us-east-1.aws.endpoints.huggingface.cloud" + "/";
-	"https://18.116.150.166:5000/scene";
+	"http://18.116.150.166:80/scene";
 
 const darkTheme = createTheme({
 	palette: {
