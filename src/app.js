@@ -78,7 +78,7 @@ function App() {
 				steps: numSteps,
 				guidance_scale: numFrames,
 			},
-		}).then((response) => {
+		}, false).then((response) => {
 			// return response.json();
 			setLoading(false);
 			console.log(JSON.stringify(response));
@@ -88,7 +88,30 @@ function App() {
 			console.log(gif);
 			setImageSrc(gif);
 			setShowImage(true);
-		});
+		}).catch((error) => {
+            query({
+                inputs: {
+                    prompt: prompt,
+                    negative_prompt: negativePrompt,
+                    steps: numSteps,
+                    guidance_scale: numFrames,
+                },
+            }, true).then((response) => {
+                // return response.json();
+                setLoading(false);
+                console.log(JSON.stringify(response));
+                // var thing = JSON.parse(response)
+                var base64 = response["content"];
+                var gif = base64ToGif(base64);
+                console.log(gif);
+                setImageSrc(gif);
+                setShowImage(true);
+            }).catch((error) => {
+                console.log(error);
+                setLoading(false);
+            });
+        });
+
 		// setTimeout(() => {
 		// 	setLoading(false);
 		// 	setImageSrc(fakeGif);
@@ -201,9 +224,9 @@ function App() {
 	);
 }
 
-async function query(data) {
+async function query(data, local) {
     console.log(JSON.stringify(data));
-	const response = await fetch(URL, {
+	const response = await fetch(local ? "scene" : URL, {
 		headers: {
 			Authorization: "Bearer XXXXXX",
 			"Content-Type": "application/json",
