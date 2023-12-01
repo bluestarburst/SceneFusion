@@ -55,7 +55,7 @@ const buttonStyle = {
 
 function App() {
 	const [prompt, setPrompt] = useState(
-		""
+		"camera panning right to left, a bird's eye view of a row of buildings in a city with trees in the foreground, masterpiece, best quality"
 	);
 	const [numSteps, setNumSteps] = useState(25);
 	const [negativePrompt, setNegativePrompt] = useState("");
@@ -68,29 +68,29 @@ function App() {
 
 	const handleSubmit = () => {
 		setLoading(true);
-		query({
-			inputs: {
-				prompt: prompt,
-				negative_prompt: negativePrompt,
-				steps: numSteps,
-				guidance_scale: numFrames,
-			},
-		}).then((response) => {
-			// return response.json();
-			setLoading(false);
-			console.log(JSON.stringify(response));
-			// var thing = JSON.parse(response)
-			var base64 = response["content"];
-			var gif = base64ToGif(base64);
-			console.log(gif);
-			setImageSrc(gif);
-			setShowImage(true);
-		});
-		// setTimeout(() => {
+		// query({
+		// 	inputs: {
+		// 		prompt: prompt,
+		// 		negative_prompt: negativePrompt,
+		// 		steps: numSteps,
+		// 		guidance_scale: numFrames,
+		// 	},
+		// }).then((response) => {
+		// 	// return response.json();
 		// 	setLoading(false);
-		// 	setImageSrc(fakeGif);
+		// 	console.log(JSON.stringify(response));
+		// 	// var thing = JSON.parse(response)
+		// 	var base64 = response["content"];
+		// 	var gif = base64ToGif(base64);
+		// 	console.log(gif);
+		// 	setImageSrc(gif);
 		// 	setShowImage(true);
-		// }, 3000);
+		// });
+		setTimeout(() => {
+			setLoading(false);
+			setImageSrc(fakeGif);
+			setShowImage(true);
+		}, 3000);
 	};
 
 	const handleRestart = () => {
