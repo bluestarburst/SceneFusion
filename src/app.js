@@ -60,13 +60,14 @@ var interval = null;
 var timeout = null;
 function App() {
 	const [prompt, setPrompt] = useState(
-		"a bird's eye view of a row of buildings in a city with trees in the foreground, masterpiece, best quality"
+		"a bird's eye view of a row of buildings in a city with trees in the foreground"
 	);
 	const [numSteps, setNumSteps] = useState(25);
 	const [negativePrompt, setNegativePrompt] = useState("");
 	const [numFrames, setNumFrames] = useState(12.5);
 	const [showImage, setShowImage] = useState(false);
 	const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
+	const [isLarge, setIsLarge] = useState(false);
 	const [imageSrc, setImageSrc] = useState("");
 
 	const [loading, setLoading] = useState(false);
@@ -94,7 +95,7 @@ function App() {
 					setImageSrc(gif);
 					setShowImage(true);
 					setRequestID(-1);
-                    setPos("");
+					setPos("");
 				} else {
 					setFlip(!flip);
 					console.log("not ready");
@@ -127,6 +128,7 @@ function App() {
 					steps: numSteps,
 					guidance_scale: numFrames,
 				},
+                isLarge: isLarge,
 				ip: num,
 			},
 			false
@@ -163,13 +165,13 @@ function App() {
 						{inQueue ? (
 							<>
 								<p>In Queue {pos}</p>
-                                <br/>
+								<br />
 								<CircularProgress />
 							</>
 						) : (
 							<>
 								<CircularProgress variant="determinate" value={progress} />
-                                <br/>
+								<br />
 								<p>{progress}%</p>
 							</>
 						)}
@@ -205,6 +207,18 @@ function App() {
 						/>
 						{showAdvancedOptions && (
 							<>
+								<FormControlLabel
+									control={
+										<Switch
+											checked={isLarge}
+											onChange={() =>
+												setIsLarge(!isLarge)
+											}
+											color="primary"
+										/>
+									}
+									label="Large Model (takes a lot longer to create)"
+								/>
 								<TextField
 									label="Negative Prompt"
 									value={negativePrompt}
