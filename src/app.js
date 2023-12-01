@@ -113,7 +113,7 @@ function App() {
 					}
 				}
 			});
-		}, 3000);
+		}, inQueue ? 5500 : 3000);
 	}, [flip]);
 
 	const handleSubmit = () => {
