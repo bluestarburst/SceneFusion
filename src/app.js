@@ -99,7 +99,7 @@ function App() {
 				} else {
 					setFlip(!flip);
 					console.log("not ready");
-					setProgress(response["progress"]);
+					setProgress(Math.floor(response["progress"]));
 					console.log("PROGRESS", response["progress"]);
 					var queue_len = response["queue"];
 					var pos = response["pos"];
