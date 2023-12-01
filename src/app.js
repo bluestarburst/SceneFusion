@@ -78,6 +78,7 @@ function App() {
 	const [inQueue, setInQueue] = useState(true);
 	const [flip, setFlip] = useState(false);
 	const [pos, setPos] = useState("");
+    const [isNotLora, setIsNotLora] = useState(true);
 
 	useEffect(() => {
 		if (requestID == -1) {
@@ -132,6 +133,7 @@ function App() {
 				},
 				isLarge: isLarge,
 				ip: num,
+                isNotLora: isNotLora,
 			},
 			false
 		)
@@ -254,6 +256,16 @@ function App() {
 										/>
 									}
 									label="Large Model (Very Slow!)"
+								/>
+                                <FormControlLabel
+									control={
+										<Switch
+											checked={!isNotLora}
+											onChange={() => setIsNotLora(!isNotLora)}
+											color="primary"
+										/>
+									}
+									label="Toon Lora"
 								/>
 							</>
 						)}
