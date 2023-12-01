@@ -44,6 +44,7 @@ const containerStyle = {
 	padding: "1rem",
 	width: "100vw",
 	maxWidth: "500px",
+    color: "white",
 };
 
 const formStyle = {
@@ -52,6 +53,7 @@ const formStyle = {
 	alignItems: "center",
 	gap: "20px",
 	width: "100%",
+    color: "white",
 };
 
 const buttonStyle = {
@@ -114,7 +116,7 @@ function App() {
 					}
 				}
 			});
-		}, inQueue ? 5500 : 3000);
+		}, 3000);
 	}, [flip]);
 
 	const handleSubmit = () => {
