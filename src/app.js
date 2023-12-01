@@ -22,6 +22,7 @@ const agent = new https.Agent({
 	rejectUnauthorized: false,
 });
 
+
 const URL =
 	// "https://wri73pe2m2znvucm.us-east-1.aws.endpoints.huggingface.cloud" + "/";
 	"http://18.116.150.166:80/scene";
@@ -31,6 +32,8 @@ const darkTheme = createTheme({
 		mode: "dark",
 	},
 });
+
+console.log("Hello World!");
 
 const containerStyle = {
 	display: "flex",
