@@ -44,7 +44,6 @@ const containerStyle = {
 	padding: "1rem",
 	width: "100vw",
 	maxWidth: "500px",
-	backgroundColor: darkTheme.palette.background.default,
 };
 
 const formStyle = {
