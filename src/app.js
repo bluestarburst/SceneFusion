@@ -73,6 +73,9 @@ function App() {
 	const [progress, setProgress] = useState(0);
 	const [inQueue, setInQueue] = useState(true);
 
+    useEffect(() => {
+        
+
 	const handleSubmit = () => {
 		setInQueue(true);
 		setLoading(true);
@@ -87,13 +90,13 @@ function App() {
 					steps: numSteps,
 					guidance_scale: numFrames,
 				},
-				id: num,
+				ip: num,
 			},
 			false
 		)
 			.then((r) => {
 				interval = setInterval(() => {
-					checkResult({ id: num }, false).then((response) => {
+					checkResult({ ip: num }, false).then((response) => {
 						if (response["ready"] == true) {
 							clearInterval(interval);
 							setLoading(false);
@@ -107,10 +110,15 @@ function App() {
 						} else {
 							console.log("not ready");
 							setProgress(response["progress"]);
-							console.log("PROGRESS",response["progress"]);
+							console.log("PROGRESS", response["progress"]);
+							if (response["progress"] > 0) {
+								setInQueue(true);
+							} else {
+								setInQueue(false);
+							}
 						}
 					});
-				}, 1000);
+				}, 3000);
 			})
 			.catch((error) => {
 				console.log(error);
@@ -138,7 +146,14 @@ function App() {
 			<div style={containerStyle}>
 				{loading ? (
 					<>
-						<CircularProgress />
+						{inQueue ? (
+							<>
+								<p>In Queue</p>
+								<CircularProgress />
+							</>
+						) : (
+							<CircularProgress variant="determinate" value={progress} />
+						)}
 					</>
 				) : showImage ? (
 					<div>
