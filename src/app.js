@@ -64,7 +64,7 @@ var interval = null;
 var timeout = null;
 function App() {
 	const [prompt, setPrompt] = useState(
-		"a bird's eye view of a row of buildings in a city with trees in the foreground"
+		"pan left to right, a bird's eye view of a row of buildings in a city with trees in the foreground, masterpiece, best quality"
 	);
 	const [numSteps, setNumSteps] = useState(25);
 	const [negativePrompt, setNegativePrompt] = useState("");
