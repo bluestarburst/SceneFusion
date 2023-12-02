@@ -64,10 +64,10 @@ var interval = null;
 var timeout = null;
 function App() {
 	const [prompt, setPrompt] = useState(
-		"pan left to right, a bird's eye view of a row of buildings in a city with trees in the foreground, masterpiece, best quality"
+		"pan left to right, a bird's eye view of a row of buildings in a city, masterpiece, best quality, high definition"
 	);
 	const [numSteps, setNumSteps] = useState(25);
-	const [negativePrompt, setNegativePrompt] = useState("");
+	const [negativePrompt, setNegativePrompt] = useState("bad quality, worse quality, low definition");
 	const [numFrames, setNumFrames] = useState(12.5);
 	const [showImage, setShowImage] = useState(false);
 	const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
