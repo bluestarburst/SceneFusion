@@ -1,7 +1,7 @@
 # SceneFusion
 A new attempt of creating a consistent scene using [AnimateDiff](https://animatediff.github.io/)'s video diffusion model. This project is inspired by both [AnimateDiff](https://animatediff.github.io/)'s capabilities and recent gaussian splatting implementations such as [DreamGaussian](https://dreamgaussian.github.io/). 
 
-https://github.com/BlueStarBurst/SceneFusion/docs/src/Resources/sample-17.gif
+![test](https://github.com/BlueStarBurst/SceneFusion/blob/main/docs/src/Resources/sample-17.gif?raw=true)
 
 # Goal
 The goal of this project is to create customizable priors (see [MVDream](https://mv-dream.github.io/)) for 3D generation from a text prompt. 
